@@ -14,11 +14,13 @@ const getEthereumContract = () => {
     const signer = provider.getSigner();
     const transactionContract = new ethers.Contract( contractAddress, contractABI, signer);
 
-    console.log({
-        provider,
-        signer,
-        transactionContract
-    })
+    return transactionContract;
+
+    // console.log({
+    //     provider,
+    //     signer,
+    //     transactionContract
+    // })
 }
 
 export const TransactionProvider = ({ children }) => {
@@ -144,6 +146,8 @@ export const TransactionProvider = ({ children }) => {
             const transactionCount = await transactionContract.getTransactionCount();
 
             setTransactionCount(transactionCount.toNumber());
+
+            window.location.reload();
             // get the data from the form
         } catch (error) {
             console.log(error);
@@ -156,7 +160,7 @@ export const TransactionProvider = ({ children }) => {
     useEffect(() => {
         checkIfWalletIsConnected();
         checkIfTransactionsExists();
-    }, []);
+    }, [transactionCount]);
 
     return (
         <TransactionContext.Provider value={{ transactionCount, connectWallet, transactions, currentAccount, formData, setFormData, handleChange, sendTransaction , isLoading}}>
